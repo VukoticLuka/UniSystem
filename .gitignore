@@ -1,0 +1,56 @@
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+.venv/*
+env/
+ENV/
+*.env
+*.venv
+
+requirements.lock
+requirements.*
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# FastAPI specific
+*.db
+*.sqlite3
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Build and distribution
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Test and coverage
+.coverage
+*.cover
+*.coverage.*
+nosetests.xml
+coverage.xml
+*.coveragerc
+*.hypothesis/
+*.tox/
+*.nox/
+*.pytest_cache/
+.cache/
