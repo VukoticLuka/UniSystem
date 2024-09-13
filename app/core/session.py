@@ -10,7 +10,9 @@ async_engine = create_async_engine(
     future=True,
     # pool_size=settings.DB_POOL_SIZE,
     # max_overflow=settings.MAX_OVERFLOW,
-    connect_args={'check_same_thread': False}
+    connect_args={'check_same_thread': False},
+    #echo for test purpose
+    echo=True
 )
 
 async_session = async_sessionmaker(bind=async_engine, autoflush=False, autocommit=False, expire_on_commit=False)
