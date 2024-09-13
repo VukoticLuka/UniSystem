@@ -8,8 +8,8 @@ async_engine = create_async_engine(
     url=settings.TEST_DB_URI,
     pool_pre_ping=True,
     future=True,
-    pool_size=settings.DB_POOL_SIZE,
-    max_overflow=settings.MAX_OVERFLOW,
+    # pool_size=settings.DB_POOL_SIZE,
+    # max_overflow=settings.MAX_OVERFLOW,
     connect_args={'check_same_thread': False}
 )
 
