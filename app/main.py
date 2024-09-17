@@ -10,10 +10,10 @@ from app.core.session import async_engine
 
 def create_app():
     @asynccontextmanager
-    async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    async def lifespan(app: FastAPI):
         async with async_engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
-            yield
+        yield
         # oslobadjanje resursa
 
     app = FastAPI(
