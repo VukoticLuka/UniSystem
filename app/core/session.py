@@ -1,5 +1,8 @@
 import logging
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from typing import AsyncIterator, Annotated
+
+from fastapi import Depends
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from .config import settings
 
 logger = logging.getLogger(__name__)
@@ -11,8 +14,17 @@ async_engine = create_async_engine(
     # pool_size=settings.DB_POOL_SIZE,
     # max_overflow=settings.MAX_OVERFLOW,
     connect_args={'check_same_thread': False},
-    #echo for test purpose
+    # echo for test purpose
     echo=True
 )
 
-async_session = async_sessionmaker(bind=async_engine, autoflush=False, autocommit=False, expire_on_commit=False)
+async_session = async_sessionmaker(bind=async_engine, autoflush=False,
+                                   autocommit=False,
+                                   expire_on_commit=False)
+
+
+async def get_session() -> AsyncIterator[AsyncSession]:
+    async with async_session() as session:
+        yield session
+
+get_async_session = Annotated[AsyncSession, Depends(get_session)]
