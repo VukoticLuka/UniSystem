@@ -27,17 +27,10 @@ class StudentDisplay(DbStudent):
 
 
 class StudentUpdate(BaseModel):
-    username: Union[str | None] = Field(default=None)
     email: Union[EmailStr | None] = Field(default=None)
     firstname: str | None = None
     lastname: str | None = None
     level: Union[Level | None] = Field(default=None)
-
-    @field_validator("username")
-    def check_username(cls, value):
-        if value is not None and len(value) not in range(8, 21):
-            raise ValueError("Username must be at least 8 and at most 20 characters")
-        return value
 
 
 
