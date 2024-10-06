@@ -9,7 +9,7 @@ class DbStudent(BaseModel):
     email: EmailStr = Field(default="user@example.com")
     firstname: str
     lastname: str
-    level: Level = Field(default=Level.BACHELOR, validate_default=True)
+    level: Level = Field(default=Level.BACHELOR.value)
 
     @field_validator("level")
     def check_level(cls, value):
@@ -22,22 +22,15 @@ class StudentDisplay(DbStudent):
     id: int
 
     model_config = ConfigDict(str_strip_whitespace=True,
-                              extra="forbid", use_enum_values=True,
+                              extra="forbid", use_enum_values=False,
                               from_attributes=True)
 
 
 class StudentUpdate(BaseModel):
-    username: Union[str | None] = Field(default=None)
     email: Union[EmailStr | None] = Field(default=None)
     firstname: str | None = None
-    lastname: str | None
+    lastname: str | None = None
     level: Union[Level | None] = Field(default=None)
-
-    @field_validator("username")
-    def check_username(cls, value):
-        if value is not None and len(value) not in range(8, 21):
-            raise ValueError("Username must be at least 8 and at most 20 characters")
-        return value
 
 
 

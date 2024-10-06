@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.base import Base
 from app.core.config import settings
 from app.core.session import async_engine
+from app.api.Student import basic_crud
 
 
 def create_app():
@@ -20,7 +21,7 @@ def create_app():
         lifespan=lifespan,
         title=settings.PROJECT_NAME,
     )
-
+    app.include_router(router=basic_crud.router)
     @app.get("/")
     async def check_health() -> Dict[str, str]:
         return {"msg": "Ok"}
