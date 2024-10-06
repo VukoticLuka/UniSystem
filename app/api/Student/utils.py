@@ -1,7 +1,7 @@
 from typing import Optional, Dict
 
 from fastapi import HTTPException, status
-from sqlalchemy import select, update
+from sqlalchemy import select, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.schemas.student_schema import StudentDisplay, StudentUpdate
@@ -9,7 +9,7 @@ from app.models.student_model import Student
 
 
 async def creation(student: Student, session: AsyncSession) -> Dict:
-    student_check = await get(student.username, session)
+    student_check = await get_student(student.username, session)
     if student_check is not None:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail=f"Student with username={student.username} already exists")
@@ -17,7 +17,7 @@ async def creation(student: Student, session: AsyncSession) -> Dict:
     return {"msg": f"New student {student.username} successfully created"}
 
 
-async def get(username: str, session: AsyncSession) -> Optional[StudentDisplay]:
+async def get_student(username: str, session: AsyncSession) -> Optional[StudentDisplay]:
     stmt = select(Student).where(Student.username == username)
     result = await session.execute(stmt)
     student = result.scalar()
@@ -29,14 +29,23 @@ async def get(username: str, session: AsyncSession) -> Optional[StudentDisplay]:
 async def student_update(username: str,
                          update_dict: StudentUpdate,
                          session: AsyncSession) -> StudentDisplay:
-    student = await get(username, session)
+    student = await get_student(username, session)
     if student is None:
         raise HTTPException(status_code=404,
                             detail="Student not found")
-    result = await session.execute(update(Student).
-                                   where(Student.username == username).
-                                   values(**update_dict.model_dump(exclude_unset=True, exclude_none=True)))
+    await session.execute(update(Student).
+                                where(Student.username == username).
+                                values(**update_dict.model_dump(exclude_unset=True, exclude_none=True)))
     ####ovde imas gresku gde kao da ne moze da se vrati taj student koji je update
-    updated_student = result.scalar_one()
+    updated_student = await get_student(username=username, session=session)
 
-    return StudentDisplay.model_validate(updated_student)
+    return updated_student
+
+
+async def delete_student(username: str, session: AsyncSession) -> Optional[StudentDisplay]:
+    student = await get_student(username, session)
+    if not student:
+        return student
+    await session.execute(delete(Student).where(Student.username == username))
+
+    return StudentDisplay.model_validate(student)
