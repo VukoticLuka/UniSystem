@@ -34,9 +34,9 @@ async def student_update(username: str,
         raise HTTPException(status_code=404,
                             detail="Student not found")
     await session.execute(update(Student).
-                                where(Student.username == username).
-                                values(**update_dict.model_dump(exclude_unset=True, exclude_none=True)))
-    ####ovde imas gresku gde kao da ne moze da se vrati taj student koji je update
+                          where(Student.username == username).
+                          values(**update_dict.model_dump(exclude_unset=True, exclude_none=True)))
+
     updated_student = await get_student(username=username, session=session)
 
     return updated_student
@@ -49,3 +49,10 @@ async def delete_student(username: str, session: AsyncSession) -> Optional[Stude
     await session.execute(delete(Student).where(Student.username == username))
 
     return StudentDisplay.model_validate(student)
+
+
+async def result_processing(result: Optional[StudentDisplay], msg: str) -> Optional[StudentDisplay]:
+    if not result:
+        raise HTTPException(status_code=404,
+                            detail=f"Student {msg} not found")
+    return result
