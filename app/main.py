@@ -22,6 +22,7 @@ def create_app():
         title=settings.PROJECT_NAME,
     )
     app.include_router(router=basic_crud.router)
+
     @app.get("/")
     async def check_health() -> Dict[str, str]:
         return {"msg": "Ok"}
