@@ -20,10 +20,9 @@ async def create(student: DbStudent, session: get_async_session):
 
 @router.get("/{username}", response_model=StudentDisplay)
 async def get_student(username: str, session: get_async_session):
-    from app.api.Student.utils import get_student, result_processing
+    from app.api.Student.utils import get_student, handle_result
     async with session.begin():
-        student = await get_student(username, session)
-        return await result_processing(student, username)
+        return await handle_result(get_student, username, session)
 
 
 @router.get("/")
@@ -40,15 +39,13 @@ async def get_by_idx(idx: int, session: get_async_session):
 
 @router.patch("/{username}", response_model=StudentDisplay)
 async def update(username: str, update_dict: StudentUpdate, session: get_async_session):
-    from app.api.Student.utils import student_update, result_processing
+    from app.api.Student.utils import student_update, handle_result
     async with session.begin():
-        student = await student_update(username, update_dict, session)
-        return await result_processing(student, username)
+        return await handle_result(student_update, username, session, update_dict)
 
 
 @router.delete("/{username}", response_model=StudentDisplay)
 async def delete(username: str, session: get_async_session):
-    from app.api.Student.utils import delete_student, result_processing
+    from app.api.Student.utils import delete_student, handle_result
     async with session.begin():
-        student = await delete_student(username, session)
-        return await result_processing(student, username)
+        return await handle_result(delete_student, username, session)
