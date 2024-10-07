@@ -1,4 +1,4 @@
-from typing import Optional, Dict
+from typing import Optional, Dict, Callable
 
 from fastapi import HTTPException, status
 from sqlalchemy import select, update, delete
@@ -50,9 +50,17 @@ async def delete_student(username: str, session: AsyncSession) -> Optional[Stude
 
     return StudentDisplay.model_validate(student)
 
+async def handle_result(func: Callable[[str, AsyncSession], Optional[StudentDisplay]],
+                        username: str,
+                        session: AsyncSession,
+                        update_dict: Optional[StudentUpdate] = None) -> StudentDisplay:
 
-async def result_processing(result: Optional[StudentDisplay], msg: str) -> Optional[StudentDisplay]:
-    if not result:
+    if update_dict is not None:
+        student = await func(username, update_dict, session)
+    else:
+        student = await func(username, session)
+
+    if not student:
         raise HTTPException(status_code=404,
-                            detail=f"Student {msg} not found")
-    return result
+                            detail=f"Student {username} not found")
+    return student
