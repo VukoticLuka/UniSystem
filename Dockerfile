@@ -4,6 +4,6 @@ WORKDIR /app
 
 COPY . .
 
-RUN pip3 install -r requirements.lock
+RUN pip3 install -r requirements.txt
 
 CMD ["python3", "./app/run.py"]
