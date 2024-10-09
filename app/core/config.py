@@ -3,12 +3,20 @@ from typing import Literal, List
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pathlib import Path
+from enum import Enum
 
 PROJECT_PATH = Path(__file__).parent.parent.parent
 
 
+class AppStage(Enum):
+    DEVELOP = "develop"
+    DEPLOY = "deploy"
+    PRODUCTION = "production"
+
+
 class Settings(BaseSettings):
     TEST_DB_URI: str = Field(default="sqlite+aiosqlite:///./test.db")
+    DEV_STAGE: str = Field(default=AppStage.DEVELOP.value)
     DB_POOL_SIZE: int = Field(default=30)
     MAX_OVERFLOW: int = Field(default=10)
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(default=60)
