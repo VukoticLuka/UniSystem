@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import APIRouter, HTTPException
 from sqlalchemy import select
 
@@ -18,6 +20,13 @@ async def create(student: DbStudent, session: get_async_session):
         return await creation(Student(**student.model_dump()), session)
 
 
+@router.get("/", response_model=List[StudentDisplay])
+async def get_all_student(session: get_async_session):
+    from app.api.Student.utils import get_all
+    async with session.begin():
+        return await get_all(session)
+
+
 @router.get("/{username}", response_model=StudentDisplay)
 async def get_student(username: str, session: get_async_session):
     from app.api.Student.utils import get_student, handle_result
@@ -25,16 +34,16 @@ async def get_student(username: str, session: get_async_session):
         return await handle_result(get_student, username, session)
 
 
-@router.get("/")
-async def get_by_idx(idx: int, session: get_async_session):
-    async with session.begin():
-        result = await session.execute(select(Student).where(Student.id == idx))
-        student = result.scalar_one_or_none()
-        if not student:
-            raise HTTPException(status_code=404,
-                                detail="Student not found")
-
-    return student
+# @router.get("/")
+# async def get_by_idx(idx: int, session: get_async_session):
+#     async with session.begin():
+#         result = await session.execute(select(Student).where(Student.id == idx))
+#         student = result.scalar_one_or_none()
+#         if not student:
+#             raise HTTPException(status_code=404,
+#                                 detail="Student not found")
+#
+#     return student
 
 
 @router.patch("/{username}", response_model=StudentDisplay)
