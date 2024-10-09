@@ -5,7 +5,7 @@ from sqlalchemy import select, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.schemas.student_schema import StudentDisplay, StudentUpdate
-from app.models.student_model import Student
+from app.models.student import Student
 from app.core.custom_exceptions import EntityNotFound, EntityAlreadyExists
 
 

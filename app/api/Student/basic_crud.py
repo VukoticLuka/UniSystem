@@ -5,7 +5,7 @@ from sqlalchemy import select
 
 from app.core.session import get_async_session
 from app.models.schemas.student_schema import DbStudent, StudentDisplay, StudentUpdate
-from app.models.student_model import Student
+from app.models.student import Student
 
 router = APIRouter(
     prefix='/student',
