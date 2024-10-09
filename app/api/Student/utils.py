@@ -50,11 +50,11 @@ async def delete_student(username: str, session: AsyncSession) -> Optional[Stude
 
     return StudentDisplay.model_validate(student)
 
+
 async def handle_result(func: Callable[[str, AsyncSession], Optional[StudentDisplay]],
                         username: str,
                         session: AsyncSession,
                         update_dict: Optional[StudentUpdate] = None) -> StudentDisplay:
-
     if update_dict is not None:
         student = await func(username, update_dict, session)
     else:

@@ -19,7 +19,6 @@ ENV/
 .idea/*
 
 requirements.lock
-requirements.*
 
 # IDEs and editors
 .vscode/
