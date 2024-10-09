@@ -1,4 +1,4 @@
-from typing import Optional, Dict, Callable
+from typing import Optional, Dict, Callable, List
 
 from fastapi import HTTPException, status
 from sqlalchemy import select, update, delete
@@ -15,6 +15,15 @@ async def creation(student: Student, session: AsyncSession) -> Dict:
                             detail=f"Student with username={student.username} already exists")
     session.add(student)
     return {"msg": f"New student {student.username} successfully created"}
+
+
+async def get_all(session: AsyncSession) -> List[StudentDisplay]:
+    stmt = select(Student)
+    result = await session.execute(stmt)
+
+    students = result.scalars().all()
+
+    return [StudentDisplay.model_validate(student) for student in students]
 
 
 async def get_student(username: str, session: AsyncSession) -> Optional[StudentDisplay]:
