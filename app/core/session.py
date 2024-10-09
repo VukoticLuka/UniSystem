@@ -3,12 +3,14 @@ from typing import AsyncIterator, Annotated
 
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
-from .config import settings
+from .config import settings, AppStage
 
 logger = logging.getLogger(__name__)
 
+db_url = settings.TEST_DB_URI if settings.DEV_STAGE == "develop" else settings.PRODUCTION_DB
+
 async_engine = create_async_engine(
-    url=settings.TEST_DB_URI,
+    url=db_url,
     pool_pre_ping=True,
     future=True,
     # pool_size=settings.DB_POOL_SIZE,

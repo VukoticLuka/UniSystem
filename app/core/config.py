@@ -17,6 +17,7 @@ class AppStage(Enum):
 class Settings(BaseSettings):
     TEST_DB_URI: str = Field(default="sqlite+aiosqlite:///./test.db")
     DEV_STAGE: str = Field(default=AppStage.DEVELOP.value)
+    PRODUCTION_DB: str = Field("")
     DB_POOL_SIZE: int = Field(default=30)
     MAX_OVERFLOW: int = Field(default=10)
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(default=60)
