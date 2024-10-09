@@ -6,13 +6,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.schemas.student_schema import StudentDisplay, StudentUpdate
 from app.models.student_model import Student
+from app.core.custom_exceptions import EntityNotFound, EntityAlreadyExists
 
 
 async def creation(student: Student, session: AsyncSession) -> Dict:
     student_check = await get_student(student.username, session)
     if student_check is not None:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
-                            detail=f"Student with username={student.username} already exists")
+        raise EntityAlreadyExists(Student, student.username)
     session.add(student)
     return {"msg": f"New student {student.username} successfully created"}
 
@@ -40,8 +40,7 @@ async def student_update(username: str,
                          session: AsyncSession) -> StudentDisplay:
     student = await get_student(username, session)
     if student is None:
-        raise HTTPException(status_code=404,
-                            detail="Student not found")
+        raise EntityNotFound(Student, username)
     await session.execute(update(Student).
                           where(Student.username == username).
                           values(**update_dict.model_dump(exclude_unset=True, exclude_none=True)))
@@ -70,6 +69,5 @@ async def handle_result(func: Callable[[str, AsyncSession], Optional[StudentDisp
         student = await func(username, session)
 
     if not student:
-        raise HTTPException(status_code=404,
-                            detail=f"Student {username} not found")
+        raise EntityNotFound(Student, username)
     return student
