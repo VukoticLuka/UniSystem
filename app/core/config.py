@@ -4,6 +4,10 @@ from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pathlib import Path
 from enum import Enum
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 PROJECT_PATH = Path(__file__).parent.parent.parent
 
@@ -15,7 +19,7 @@ class AppStage(Enum):
 
 
 class Settings(BaseSettings):
-    TEST_DB_URI: str = Field(default="sqlite+aiosqlite:///./test.db")
+    TEST_DB_URI: str = Field(default=os.getenv("TEST_DB_URL"))
     DEV_STAGE: str = Field(default=AppStage.DEVELOP.value)
     PRODUCTION_DB: str = Field("")
     DB_POOL_SIZE: int = Field(default=30)
