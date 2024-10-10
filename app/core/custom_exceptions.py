@@ -1,11 +1,11 @@
-from typing import Optional, Union, Generic
+from typing import Optional, Union, Generic, Type
 
 from fastapi import HTTPException, status
 from app.core.base import ModelGen
 
 
 class EntityNotFound(HTTPException, Generic[ModelGen]):
-    def __init__(self, model_class: ModelGen, entity_data: Union[str, int]):
+    def __init__(self, model_class: Type[ModelGen], entity_data: Union[str, int]):
         status_code = status.HTTP_404_NOT_FOUND
         detail = f"{model_class.__name__} "
         if isinstance(entity_data, int):
@@ -16,7 +16,7 @@ class EntityNotFound(HTTPException, Generic[ModelGen]):
 
 
 class EntityAlreadyExists(HTTPException, Generic[ModelGen]):
-    def __init__(self, model_class: ModelGen, entity_data: Union[str, int]):
+    def __init__(self, model_class: Type[ModelGen], entity_data: Union[str, int]):
         status_code = status.HTTP_409_CONFLICT
         detail = f"{model_class.__name__} "
         if isinstance(entity_data, int):
