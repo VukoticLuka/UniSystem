@@ -1,3 +1,5 @@
+from typing import Union
+
 from sqlalchemy import Integer, String, Enum as SqlEnum
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -11,6 +13,11 @@ class Level(Enum):
     DOCTORAL = "doctoral"
 
 
+class Gender(Enum):
+    MALE = "male"
+    FEMALE = "female"
+
+
 class Student(Base):
     __tablename__ = "user"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -18,4 +25,7 @@ class Student(Base):
     email: Mapped[str] = mapped_column(String, unique=True)
     firstname: Mapped[str] = mapped_column(String)
     lastname: Mapped[str] = mapped_column(String)
-    level: Mapped[Level] = mapped_column(SqlEnum(Level))
+    index_number: Mapped[int] = mapped_column(Integer)
+    enrollment_year: Mapped[int] = mapped_column(Integer)
+    gender: Mapped[Union[Gender, None]] = mapped_column(SqlEnum(Gender), nullable=True)
+    education: Mapped[Union[Level, None]] = mapped_column(SqlEnum(Level), nullable=True)
