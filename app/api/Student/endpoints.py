@@ -1,11 +1,12 @@
 from typing import List
 
-from fastapi import APIRouter, HTTPException
-from sqlalchemy import select
+from fastapi import APIRouter
 
 from app.core.session import get_async_session
 from app.models.schemas.student_schema import DbStudent, StudentDisplay, StudentUpdate
 from app.models.student import Student
+
+from app.core.services import handle_result
 
 router = APIRouter(
     prefix='/student',
@@ -29,7 +30,7 @@ async def get_all_student(session: get_async_session):
 
 @router.get("/{username}", response_model=StudentDisplay)
 async def get_student(username: str, session: get_async_session):
-    from app.api.Student.utils import get_student, handle_result
+    from app.api.Student.utils import get_student
     async with session.begin():
         return await handle_result(get_student, username, session)
 
@@ -48,13 +49,13 @@ async def get_student(username: str, session: get_async_session):
 
 @router.patch("/{username}", response_model=StudentDisplay)
 async def update(username: str, update_dict: StudentUpdate, session: get_async_session):
-    from app.api.Student.utils import student_update, handle_result
+    from app.api.Student.utils import student_update
     async with session.begin():
         return await handle_result(student_update, username, session, update_dict)
 
 
 @router.delete("/{username}", response_model=StudentDisplay)
 async def delete(username: str, session: get_async_session):
-    from app.api.Student.utils import delete_student, handle_result
+    from app.api.Student.utils import delete_student
     async with session.begin():
         return await handle_result(delete_student, username, session)
