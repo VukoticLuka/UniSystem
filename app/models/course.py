@@ -17,5 +17,3 @@ class Course(Base):
     espb: Mapped[int] = mapped_column(Integer, nullable=False)
     semester: Mapped[Semester] = mapped_column(SqlEnum(Semester), nullable=False)
     study_year: Mapped[int] = mapped_column(Integer, nullable=False)
-
-    #add students_ids column
