@@ -66,6 +66,7 @@ To run the application, follow these steps:
    export PYTHONPATH=<absolute path to your project>
    python3 app/run.py
    ```
+- than at the end open your browser: [link](http://localhost:8000/docs#)
 
 ### Project structure:
 
