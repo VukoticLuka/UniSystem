@@ -1,8 +1,12 @@
+from typing import List
+
 from sqlalchemy import Integer, String, Enum as SqlEnum
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.base import Base
 from enum import Enum
+
+from app.models.stud_course import student_course
 
 
 class Semester(Enum):
@@ -17,3 +21,5 @@ class Course(Base):
     espb: Mapped[int] = mapped_column(Integer, nullable=False)
     semester: Mapped[Semester] = mapped_column(SqlEnum(Semester), nullable=False)
     study_year: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    students: Mapped[List['Student']] = relationship('Student', secondary=student_course, back_populates='courses')
