@@ -1,7 +1,7 @@
 {
     "case_create": {
         "payload": {
-            "username": "johndoe",
+            "username": "johndoe123",
             "email": "johndoe@example.com",
             "firstname": "John",
             "lastname": "Doe",
@@ -13,12 +13,12 @@
     },
     "case_get": {
         "want": {
-            "username": "johndoe"
+            "username": "johndoe123"
         }
     },
     "case_patch": {
         "want": {
-            "username": "johndoe",
+            "username": "johndoe123",
             "update_dict": {
                 "email": "JOHNDOE@example.com",
                 "enrollment_year": 2017,
@@ -28,7 +28,7 @@
     },
     "case_delete": {
         "want": {
-            "username": "johndoe"
+            "username": "johndoe123"
         }
     }
 }
