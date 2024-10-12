@@ -5,12 +5,13 @@ import pytest
 import pytest_asyncio
 
 import httpx
+from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.base import Base
 from app.main import app
 
-
+#deprecated
 @pytest.fixture(scope="session")
 def event_loop(request) -> Generator:
     loop = asyncio.get_event_loop_policy().new_event_loop()
@@ -18,13 +19,14 @@ def event_loop(request) -> Generator:
     loop.close()
 
 
-@pytest_asyncio.fixture
+@pytest_asyncio.fixture(scope="function")
 async def async_client():
-    async with httpx.AsyncClient(
-            app=app,
+    async with AsyncClient(
+            transport=ASGITransport(app=app),
             base_url="http://testserver"
     ) as client:
         yield client
+
 
 @pytest_asyncio.fixture(scope="function")
 async def async_session() -> AsyncSession:
