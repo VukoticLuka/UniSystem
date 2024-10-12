@@ -7,13 +7,13 @@ from app.core.base import Base
 from enum import Enum
 
 
-class Level(Enum):
+class Level(str, Enum):
     BACHELOR = "bachelor"
     MASTER = "master"
     DOCTORAL = "doctoral"
 
 
-class Gender(Enum):
+class Gender(str, Enum):
     MALE = "male"
     FEMALE = "female"
 

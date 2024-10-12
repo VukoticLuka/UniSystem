@@ -14,7 +14,7 @@ router = APIRouter(
 )
 
 
-@router.post("/")
+@router.post("/", status_code=201)
 async def create(student: DbStudent, session: get_async_session):
     from app.api.Student.utils import creation
     async with session.begin():
@@ -38,11 +38,11 @@ async def get_student(username: str, session: get_async_session):
 # @router.get("/")
 # async def get_by_idx(idx: int, session: get_async_session):
 #     async with session.begin():
-#         result = await session.execute(select(Student).where(Student.id == idx))
+#         result = await session.execute(select(student).where(student.id == idx))
 #         student = result.scalar_one_or_none()
 #         if not student:
 #             raise HTTPException(status_code=404,
-#                                 detail="Student not found")
+#                                 detail="student not found")
 #
 #     return student
 
