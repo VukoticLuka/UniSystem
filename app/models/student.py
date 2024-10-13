@@ -1,4 +1,4 @@
-from typing import Union, List
+from typing import Union, List, Set
 
 from sqlalchemy import Integer, String, Enum as SqlEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -32,7 +32,8 @@ class Student(Base):
     gender: Mapped[Union[Gender, None]] = mapped_column(SqlEnum(Gender), nullable=True)
     education: Mapped[Union[Level, None]] = mapped_column(SqlEnum(Level), nullable=True)
 
-    courses: Mapped[List['Course']] = relationship('Course',
+    courses: Mapped[Set['Course']] = relationship('Course',
                                                    secondary=student_course,
                                                    back_populates='students',
+                                                   lazy='selectin',
                                                    cascade='all')

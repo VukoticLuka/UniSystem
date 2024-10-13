@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Set
 
 from sqlalchemy import Integer, String, Enum as SqlEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -22,7 +22,8 @@ class Course(Base):
     semester: Mapped[Semester] = mapped_column(SqlEnum(Semester), nullable=False)
     study_year: Mapped[int] = mapped_column(Integer, nullable=False)
 
-    students: Mapped[List['Student']] = relationship('Student',
+    students: Mapped[Set['Student']] = relationship('Student',
                                                      secondary=student_course,
                                                      back_populates='courses',
+                                                     lazy='selectin',
                                                      cascade='all')
