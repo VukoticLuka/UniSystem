@@ -32,4 +32,7 @@ class Student(Base):
     gender: Mapped[Union[Gender, None]] = mapped_column(SqlEnum(Gender), nullable=True)
     education: Mapped[Union[Level, None]] = mapped_column(SqlEnum(Level), nullable=True)
 
-    courses: Mapped[List['Course']] = relationship('Course', secondary=student_course, back_populates='students')
+    courses: Mapped[List['Course']] = relationship('Course',
+                                                   secondary=student_course,
+                                                   back_populates='students',
+                                                   cascade='all, delete-orphan')

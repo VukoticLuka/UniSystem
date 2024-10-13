@@ -22,4 +22,7 @@ class Course(Base):
     semester: Mapped[Semester] = mapped_column(SqlEnum(Semester), nullable=False)
     study_year: Mapped[int] = mapped_column(Integer, nullable=False)
 
-    students: Mapped[List['Student']] = relationship('Student', secondary=student_course, back_populates='courses')
+    students: Mapped[List['Student']] = relationship('Student',
+                                                     secondary=student_course,
+                                                     back_populates='courses',
+                                                     cascade='all, delete-orphan')
