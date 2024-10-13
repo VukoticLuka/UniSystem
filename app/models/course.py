@@ -25,4 +25,4 @@ class Course(Base):
     students: Mapped[List['Student']] = relationship('Student',
                                                      secondary=student_course,
                                                      back_populates='courses',
-                                                     cascade='all, delete-orphan')
+                                                     cascade='all')
