@@ -31,3 +31,24 @@ async def enroll_stud_to_course(username: str,
     await session.commit()
 
     return {"msg": "Ok"}
+
+@router.get('/by-student/{username}')
+async def get_all_student_courses(username: str, session: get_async_session):
+    async with session.begin():
+        result = await session.execute(
+            select(Course.course_id, Course.name, Course.espb).
+            join(Student.courses).
+            where(Student.username == username)
+        )
+
+        courses = result.all()
+
+        course_list = [
+            {"course_id": course_id, "name": name, "espb": espb}
+            for course_id, name, espb in courses
+        ]
+
+        return course_list
+
+
+
