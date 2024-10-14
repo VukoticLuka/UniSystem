@@ -1,0 +1,35 @@
+{
+    "case_create": {
+        "payload": {
+            "username": "johndoe123",
+            "email": "johndoe@example.com",
+            "firstname": "John",
+            "lastname": "Doe",
+            "index_number": 11,
+            "enrollment_year": 2021,
+            "gender": "male",
+            "education": "bachelor"
+        }
+    },
+    "case_get": {
+        "want": {
+            "username": "johndoe123"
+        }
+    },
+    "case_patch": {
+        "want": {
+            "username": "johndoe123",
+            "update_dict": {
+                "email": "JOHNDOE@example.com",
+                "enrollment_year": 2017,
+                "education": "master"
+            }
+        }
+    },
+    "case_delete": {
+        "want": {
+            "username": "johndoe123"
+        }
+    }
+}
+

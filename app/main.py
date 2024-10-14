@@ -8,6 +8,7 @@ from app.core.config import settings
 from app.core.session import async_engine
 from app.api.Student import endpoints as student
 from app.api.Course import endpoints as course
+from app.api.StudCourse import endpoints as stud_course
 
 
 def create_app():
@@ -24,6 +25,7 @@ def create_app():
     )
     app.include_router(router=student.router)
     app.include_router(router=course.router)
+    app.include_router(router=stud_course.router)
 
     @app.get("/")
     async def check_health() -> Dict[str, str]:
