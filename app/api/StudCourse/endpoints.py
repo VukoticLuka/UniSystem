@@ -1,3 +1,5 @@
+import heapq
+
 from fastapi import APIRouter
 from sqlalchemy import select
 from app.core.session import get_async_session
@@ -32,6 +34,7 @@ async def enroll_stud_to_course(username: str,
 
     return {"msg": "Ok"}
 
+
 @router.get('/by-student/{username}')
 async def get_all_student_courses(username: str, session: get_async_session):
     async with session.begin():
@@ -51,4 +54,13 @@ async def get_all_student_courses(username: str, session: get_async_session):
         return course_list
 
 
+@router.get('/course/{course_name}')
+async def get_all_students_on_course(course_name: str, session: get_async_session):
+    async with session.begin():
+        result = await session.execute(
+            select(Student.username).
+            join(Course.students).
+            where(Course.name == course_name)
+        )
 
+        return result.scalars().all()
