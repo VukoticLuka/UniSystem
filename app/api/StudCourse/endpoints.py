@@ -1,6 +1,8 @@
 from fastapi.responses import JSONResponse
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
+
 from app.core.session import get_async_session
 from app.models.course import Course
 from app.models.student import Student
@@ -86,14 +88,18 @@ async def insert_stud_grade(stud_id: int,
                             grade: int,
                             session: get_async_session):
     from app.models.stud_course import student_course
-    async with session.begin():
-        await session.execute(
-            student_course.update()
-            .where(student_course.c.student_id == stud_id)
-            .where(student_course.c.course_id == course_id)
-            .values(grade=grade)
-        )
+    try:
+        async with session.begin():
+            await session.execute(
+                student_course.update()
+                .where(student_course.c.student_id == stud_id)
+                .where(student_course.c.course_id == course_id)
+                .values(grade=grade)
+            )
 
-    await session.commit()
+        await session.commit()
 
-    return JSONResponse({"msg": f"Grade {grade} added for student {stud_id} on course {course_id}."})
+        return JSONResponse({"msg": f"Grade {grade} added for student {stud_id} on course {course_id}."})
+    except IntegrityError as e:
+        raise HTTPException(status_code=400,
+                            detail="Grade must be between 6 and 10")
