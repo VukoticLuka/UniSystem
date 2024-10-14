@@ -32,7 +32,7 @@ async def enroll_stud_to_course(username: str,
         student.courses.add(course)
     await session.commit()
 
-    return {"msg": "Ok"}
+    return {"msg": f"Student {username} successfully enrolled in the {course_name} course"}
 
 
 @router.get('/by-student/{username}')
