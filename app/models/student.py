@@ -33,7 +33,7 @@ class Student(Base):
     education: Mapped[Union[Level, None]] = mapped_column(SqlEnum(Level), nullable=True)
 
     courses: Mapped[Set['Course']] = relationship('Course',
-                                                   secondary=student_course,
-                                                   back_populates='students',
-                                                   lazy='selectin',
-                                                   cascade='all')
+                                                  secondary=student_course,
+                                                  back_populates='students',
+                                                  lazy='selectin',
+                                                  cascade='all, delete')

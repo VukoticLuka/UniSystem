@@ -23,7 +23,7 @@ class Course(Base):
     study_year: Mapped[int] = mapped_column(Integer, nullable=False)
 
     students: Mapped[Set['Student']] = relationship('Student',
-                                                     secondary=student_course,
-                                                     back_populates='courses',
-                                                     lazy='selectin',
-                                                     cascade='all')
+                                                    secondary=student_course,
+                                                    back_populates='courses',
+                                                    lazy='selectin',
+                                                    cascade='all, delete')

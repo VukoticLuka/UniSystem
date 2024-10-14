@@ -36,9 +36,9 @@ async def test_create_student(
         async_session: AsyncSession
 ):
     payload = data["case_create"]["payload"]
-    response = await async_client.post("/student/", json=DbStudent(**payload).dict())
+    response = await async_client.post("/student/", json=DbStudent(**payload).model_dump())
 
-    assert response.status_code == 422
+    assert response.status_code == 201
 
 
 @pytest.mark.asyncio
@@ -78,6 +78,23 @@ async def test_patch_student(
 
     assert response.status_code == 200
     assert response.json()["email"] == update_dict["email"]
+
+
+@pytest.mark.asyncio
+async def test_delete_student(async_client: AsyncClient,
+                              async_session: AsyncSession):
+    payload = data["case_create"]["payload"]
+
+    async with async_session.begin():
+        student = Student(**payload)
+        async_session.add(student)
+        await async_session.flush()
+
+    username = data["case_delete"]["want"]["username"]
+    response = await async_client.delete(f"/student/{username}")
+
+    assert response.status_code == 200
+    assert response.json()["username"] == username
 
 
 @pytest.mark.asyncio
