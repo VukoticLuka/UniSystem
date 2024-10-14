@@ -36,4 +36,4 @@ class Student(Base):
                                                   secondary=student_course,
                                                   back_populates='students',
                                                   lazy='selectin',
-                                                  cascade='all, delete')
+                                                  cascade='all, delete, save-update')
