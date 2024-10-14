@@ -1,5 +1,4 @@
-import heapq
-
+from fastapi.responses import JSONResponse
 from fastapi import APIRouter
 from sqlalchemy import select
 from app.core.session import get_async_session
@@ -64,3 +63,37 @@ async def get_all_students_on_course(course_name: str, session: get_async_sessio
         )
 
         return result.scalars().all()
+
+
+@router.get('/grade/{stud_name}-{course_name}')
+async def get_grade(stud_id: int, course_id: int, session: get_async_session):
+    from app.models.stud_course import student_course
+    async with session.begin():
+        result_db = await session.execute(
+            student_course.select()
+            .where(student_course.c.student_id == stud_id)
+            .where(student_course.c.course_id == course_id)
+        )
+
+        result = result_db.fetchone()
+
+        return result.grade
+
+
+@router.post("/grade/{stud_id}-{course_id}")
+async def insert_stud_grade(stud_id: int,
+                            course_id: int,
+                            grade: int,
+                            session: get_async_session):
+    from app.models.stud_course import student_course
+    async with session.begin():
+        await session.execute(
+            student_course.update()
+            .where(student_course.c.student_id == stud_id)
+            .where(student_course.c.course_id == course_id)
+            .values(grade=grade)
+        )
+
+    await session.commit()
+
+    return JSONResponse({"msg": f"Grade {grade} added for student {stud_id} on course {course_id}."})
