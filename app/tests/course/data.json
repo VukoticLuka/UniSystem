@@ -11,5 +11,10 @@
     "want": {
       "name": "RBP"
     }
+  },
+  "case_delete": {
+    "want": {
+      "name": "RBP"
+    }
   }
 }
