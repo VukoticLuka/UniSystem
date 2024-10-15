@@ -20,7 +20,7 @@ class AppStage(Enum):
 
 class Settings(BaseSettings):
     # TEST_DB_URI: str = Field(default=os.getenv("TEST_DB_URL"))
-    TEST_DB_URI: str = "sqlite+aiosqlite:///./test.db"
+    TEST_DB_URI: str = str(os.getenv('TEST_DB_URI','sqlite+aiosqlite:///./test.db'))
     DEV_STAGE: str = Field(default=AppStage.DEVELOP.value)
     PRODUCTION_DB: str = Field("")
     DB_POOL_SIZE: int = Field(default=30)
