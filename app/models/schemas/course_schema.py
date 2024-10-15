@@ -22,7 +22,8 @@ class CourseDisplay(DbCourse):
     course_id: int
 
     model_config = ConfigDict(extra="forbid",
-                              from_attributes=True)
+                              from_attributes=True,
+                              use_enum_values=False)
 
 
 class CourseUpdate(BaseModel):
