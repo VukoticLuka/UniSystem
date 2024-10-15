@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
 from app.core.services import handle_result
-from app.models.schemas.course_schema import DbCourse, CourseDisplay
+from app.models.schemas.course_schema import DbCourse, CourseDisplay, CourseUpdate
 from app.core.session import get_async_session
 
 router = APIRouter(
@@ -45,3 +45,11 @@ async def delete_course(name: str, session: get_async_session) -> CourseDisplay:
         return await handle_result(delete_course_by_name, name, session)
 
 
+@router.patch("/{name}", status_code=200, response_model=CourseDisplay)
+async def update_course(name: str,
+                        update_dict: CourseUpdate,
+                        session: get_async_session) -> CourseDisplay:
+    from app.api.Course.utils import update_course_by_name
+
+    async with session.begin():
+        return await handle_result(update_course_by_name,name,session,update_dict)
