@@ -18,7 +18,7 @@ async def create_course(course: DbCourse, session: get_async_session) -> JSONRes
         return await course_creation(course, session)
 
 
-@router.get("/", response_model=CourseDisplay)
+@router.get("/{name}", response_model=CourseDisplay)
 async def get_course(name: str, session: get_async_session) -> CourseDisplay:
     from app.api.Course.utils import course_fetching
     async with session.begin():
