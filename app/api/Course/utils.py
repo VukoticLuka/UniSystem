@@ -1,4 +1,4 @@
-from typing import Optional, Callable
+from typing import Optional, Callable, List
 from fastapi.responses import JSONResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -28,3 +28,10 @@ async def course_fetching(name: str, session: AsyncSession) -> Optional[CourseDi
         return None
     return CourseDisplay.model_validate(course)
 
+
+async def all_courses(session: AsyncSession) -> List[CourseDisplay]:
+    result = await session.execute(select(Course))
+
+    courses = result.scalars().all()
+
+    return [CourseDisplay.model_validate(course) for course in courses] if courses else []
