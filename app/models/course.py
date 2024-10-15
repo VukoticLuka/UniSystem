@@ -9,7 +9,7 @@ from enum import Enum
 from app.models.stud_course import student_course
 
 
-class Semester(Enum):
+class Semester(str, Enum):
     FIRST = "first"
     SECOND = "second"
 

@@ -22,11 +22,11 @@ class CourseDisplay(DbCourse):
     course_id: int
 
     model_config = ConfigDict(extra="forbid",
-                              from_attributes=True)
+                              from_attributes=True,
+                              use_enum_values=False)
 
 
 class CourseUpdate(BaseModel):
-    name: Union[str, None] = Field(default=None)
     espb: Union[int, None] = Field(default=None)
     semester: Union[Semester, None] = Field(default=None)
     study_year: Union[int, None] = Field(default=None)

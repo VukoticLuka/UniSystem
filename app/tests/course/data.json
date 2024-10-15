@@ -1,0 +1,20 @@
+{
+  "case_create": {
+    "payload": {
+      "name": "RBP",
+      "espb": 6,
+      "semester": "second",
+      "study_year": 2
+    }
+  },
+  "case_get": {
+    "want": {
+      "name": "RBP"
+    }
+  },
+  "case_delete": {
+    "want": {
+      "name": "RBP"
+    }
+  }
+}
