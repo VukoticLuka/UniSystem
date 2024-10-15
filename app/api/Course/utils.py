@@ -1,11 +1,11 @@
 from typing import Optional, Callable, List
 from fastapi.responses import JSONResponse
-from sqlalchemy import select, delete
+from sqlalchemy import select, delete, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.custom_exceptions import EntityAlreadyExists, EntityNotFound
 from app.models.course import Course
-from app.models.schemas.course_schema import DbCourse, CourseDisplay
+from app.models.schemas.course_schema import DbCourse, CourseDisplay, CourseUpdate
 
 
 async def course_creation(course: DbCourse, session: AsyncSession) -> JSONResponse:
@@ -41,7 +41,7 @@ async def delete_course_by_name(name: str, session: AsyncSession) -> Optional[Co
     course = await course_fetching(name, session)
 
     if not course:
-        return course
+        return None
 
     result = await session.execute(delete(Course).where(Course.name == name))
 
@@ -49,3 +49,18 @@ async def delete_course_by_name(name: str, session: AsyncSession) -> Optional[Co
         raise Exception(f"None or multiple row was deleted on course name {name}")
 
     return CourseDisplay.model_validate(course)
+
+
+async def update_course_by_name(name: str,
+                                update_dict: CourseUpdate,
+                                session: AsyncSession) -> Optional[CourseDisplay]:
+    result = await course_fetching(name, session)
+
+    if result is None:
+        return result
+
+    await session.execute(update(Course)
+                          .where(Course.name == name)
+                          .values(**update_dict.model_dump(exclude_unset=True, exclude_none=True)))
+
+    return await course_fetching(name,session)
