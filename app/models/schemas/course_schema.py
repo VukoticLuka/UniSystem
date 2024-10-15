@@ -27,7 +27,6 @@ class CourseDisplay(DbCourse):
 
 
 class CourseUpdate(BaseModel):
-    name: Union[str, None] = Field(default=None)
     espb: Union[int, None] = Field(default=None)
     semester: Union[Semester, None] = Field(default=None)
     study_year: Union[int, None] = Field(default=None)
