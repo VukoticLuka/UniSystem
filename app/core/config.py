@@ -1,4 +1,4 @@
-from typing import Literal, List
+from typing import Literal, List, Optional
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     MAX_OVERFLOW: int = Field(default=10)
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(default=60)
     PROJECT_NAME: str = Field(default="MyFastApiProj")
-    RUNNING_MODE: Literal["uvicorn"] | None = Field(default="uvicorn")
+    RUNNING_MODE: Optional[str] = Field(default="uvicorn")
     BASE_URL: str = Field(default="http://localhost:8000")
     LISTENING_HOST: str = Field(default="0.0.0.0")  # noqa: S104
     LISTENING_PORT: int = Field(default=8000, gt=0, le=65535)
